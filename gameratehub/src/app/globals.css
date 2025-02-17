@@ -1,3 +1,4 @@
+
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -5,8 +6,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ffffff;
+    --foreground: #0a0a0a;
   }
 }
 
@@ -39,4 +40,45 @@ a {
   html {
     color-scheme: dark;
   }
+}
+.bg-dark-custom {
+  background-color: #0D0D0D !important;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255,255,255,1)' stroke-width='2' stroke-linecap='round' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+  color: #FFFFFF !important;
+}
+
+.navbar-dark .navbar-nav .nav-link:hover {
+  color: #1C1C1C !important; 
+}
+
+.navbar-dark .navbar-brand {
+  color: #FFFFFF !important;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.fa-icon {
+  font-size: 18px; 
+  margin-right: 8px;
+  line-height: 1;
+}
+
+.navbar-nav .nav-link {
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+}
+
+.navbar-nav .nav-item {
+  display: flex;  /* Asegura que los íconos y los textos estén alineados */
+  align-items: center; /* Centra los iconos verticalmente */
+}
+.navbar-nav .nav-item:first-child .fa-home {
+  margin-bottom: 0; /* Elimina cualquier espacio extra debajo del icono */
 }
