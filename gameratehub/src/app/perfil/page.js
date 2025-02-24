@@ -1,6 +1,8 @@
-'use client';
+"use client";
 import React, { useEffect, useState } from "react";
 import { supabase } from "../supabase/supabase";
+import { FaCog } from "react-icons/fa"; // Ícono de configuración
+import "../globals.css";
 
 export default function PerfilPage() {
   const [userProfile, setUserProfile] = useState(null);
@@ -13,13 +15,13 @@ export default function PerfilPage() {
     informacion: "",
     foto_perfil: null,
   });
-  const [fotoPerfilUrl, setFotoPerfilUrl] = useState("/defecto.png"); 
-  const [isEditing, setIsEditing] = useState(false); 
-  const [mejoresJuegos, setMejoresJuegos] = useState([]); 
+  const [fotoPerfilUrl, setFotoPerfilUrl] = useState("/defecto.png");
+  const [isEditing, setIsEditing] = useState(false);
+  const [mejoresJuegos, setMejoresJuegos] = useState([]);
 
   const juegos = [
     { id: 1, titulo: "Final Fantasy VII", imagen: "/rpg1.jpg" },
-    { id: 5, titulo: "One Piece Odyssey",  imagen: "/fantasy2.jpg" },
+    { id: 5, titulo: "One Piece Odyssey", imagen: "/fantasy2.jpg" },
     { id: 8, titulo: "Black Ops 3", imagen: "/shooter2.jpg" },
   ];
 
@@ -42,7 +44,6 @@ export default function PerfilPage() {
         });
 
         if (!response.ok) {
-          const errorResponse = await response.json();
           setError("No se pudo cargar el perfil.");
           setLoading(false);
           return;
@@ -59,7 +60,7 @@ export default function PerfilPage() {
     };
 
     fetchUserProfile();
-    setMejoresJuegos(juegos); 
+    setMejoresJuegos(juegos);
   }, []);
 
   const handleInputChange = (e) => {
@@ -76,12 +77,17 @@ export default function PerfilPage() {
     setNewProfileData((prevData) => ({ ...prevData, foto_perfil: file }));
     if (file) {
       const imageUrl = URL.createObjectURL(file);
-      setFotoPerfilUrl(imageUrl); 
+      setFotoPerfilUrl(imageUrl);
     }
   };
 
   const validateForm = () => {
-    if (!newProfileData.pais || !newProfileData.localidad || !newProfileData.telefono || !newProfileData.informacion) {
+    if (
+      !newProfileData.pais ||
+      !newProfileData.localidad ||
+      !newProfileData.telefono ||
+      !newProfileData.informacion
+    ) {
       setError("Todos los campos son obligatorios.");
       return false;
     }
@@ -99,7 +105,7 @@ export default function PerfilPage() {
 
     if (!validateForm()) return;
 
-    let fotoUrl = userProfile.foto_perfil || ""; 
+    let fotoUrl = userProfile.foto_perfil || "";
 
     if (newProfileData.foto_perfil) {
       const fileName = `${Date.now()}-${newProfileData.foto_perfil.name}`;
@@ -140,7 +146,6 @@ export default function PerfilPage() {
       });
 
       if (!response.ok) {
-        const errorResponse = await response.json();
         setError("No se pudo actualizar el perfil.");
         return;
       }
@@ -148,10 +153,8 @@ export default function PerfilPage() {
       const { user } = await response.json();
       setUserProfile(user);
       setIsEditing(false);
-
-      alert('Perfil actualizado correctamente'); 
-
-      window.location.href = "/perfil"; 
+      alert("Perfil actualizado correctamente");
+      window.location.href = "/perfil";
     } catch (err) {
       setError("Error al actualizar el perfil.");
     }
@@ -171,68 +174,100 @@ export default function PerfilPage() {
   };
 
   if (loading) {
-    return <div>Cargando...</div>;
+    return <div className="loading">Cargando...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;
+    return <div className="error">{error}</div>;
   }
 
   return (
-    <div>
-      <h1>Perfil de Usuario</h1>
-      <p>
-        <strong>Nombre:</strong> {userProfile?.nombre}
-      </p>
-      <p>
-        <strong>Email:</strong> {userProfile?.email}
-      </p>
+    <div className="perfil-container">
+      <h1>
+        Perfil de Usuario
+        <FaCog className="config-icon" onClick={handleEditClick} />
+      </h1>
+
+      <img src={fotoPerfilUrl} alt="Foto de perfil" className="perfil-imagen" />
 
       {isEditing ? (
-        <form onSubmit={handleSubmit}>
-          <div>
-            <label>País:</label>
-            <input type="text" name="pais" value={newProfileData.pais} onChange={handleInputChange} />
-          </div>
-          <div>
-            <label>Localidad:</label>
-            <input type="text" name="localidad" value={newProfileData.localidad} onChange={handleInputChange} />
-          </div>
-          <div>
-            <label>Teléfono:</label>
-            <input type="text" name="telefono" value={newProfileData.telefono} onChange={handleInputChange} />
-          </div>
-          <div>
-            <label>Información:</label>
-            <input type="text" name="informacion" value={newProfileData.informacion} onChange={handleInputChange} />
-          </div>
-          <div>
-            <label>Foto de perfil:</label>
-            <input type="file" name="foto_perfil" accept="image/*" onChange={handleFileChange} />
-          </div>
+        <form className="perfil-form" onSubmit={handleSubmit}>
+          <label>País:</label>
+          <input
+            type="text"
+            name="pais"
+            value={newProfileData.pais}
+            onChange={handleInputChange}
+          />
+
+          <label>Localidad:</label>
+          <input
+            type="text"
+            name="localidad"
+            value={newProfileData.localidad}
+            onChange={handleInputChange}
+          />
+
+          <label>Teléfono:</label>
+          <input
+            type="text"
+            name="telefono"
+            value={newProfileData.telefono}
+            onChange={handleInputChange}
+          />
+
+          <label>Información:</label>
+          <input
+            type="text"
+            name="informacion"
+            value={newProfileData.informacion}
+            onChange={handleInputChange}
+          />
+
+          <label>Foto de perfil:</label>
+          <input
+            type="file"
+            name="foto_perfil"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
+
           <button type="submit">Actualizar perfil</button>
         </form>
       ) : (
-        <div>
-          <p><strong>País:</strong> {userProfile?.pais}</p>
-          <p><strong>Localidad:</strong> {userProfile?.localidad}</p>
-          <p><strong>Teléfono:</strong> {userProfile?.telefono}</p>
-          <p><strong>Información:</strong> {userProfile?.informacion}</p>
-          <button onClick={handleEditClick}>Editar Perfil</button>
+        <div className="perfil-info">
+          <p>
+            <strong>Nombre:</strong> {userProfile?.nombre}
+          </p>
+          <p>
+            <strong>Email:</strong> {userProfile?.email}
+          </p>
+          <p>
+            <strong>País:</strong> {userProfile?.pais}
+          </p>
+          <p>
+            <strong>Localidad:</strong> {userProfile?.localidad}
+          </p>
+          <p>
+            <strong>Teléfono:</strong> {userProfile?.telefono}
+          </p>
+          <p>
+            <strong>Información:</strong> {userProfile?.informacion}
+          </p>
         </div>
       )}
 
-      <div>
-        <h2>Foto de perfil:</h2>
-        <img src={fotoPerfilUrl} alt="Foto de perfil" width="100" style={{ borderRadius: "50%" }} />
-      </div>
-
       <section>
         <h2>Mejores juegos</h2>
-        <div>
+        <div className="juegos-container">
           {mejoresJuegos.map((juego) => (
-            <div key={juego.id}>
-              <img src={juego.imagen} alt={juego.titulo} title={juego.titulo} width={150} />
+            <div key={juego.id} className="juego-card">
+              <img
+                src={juego.imagen}
+                alt={juego.titulo}
+                title={juego.titulo}
+                width={150}
+              />
               <h3>{juego.titulo}</h3>
             </div>
           ))}

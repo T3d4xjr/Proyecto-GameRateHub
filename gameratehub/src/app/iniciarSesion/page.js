@@ -18,7 +18,6 @@ export default function Login() {
       });
 
       if (error) {
-        setErrorMessage('Error al iniciar sesión: ' + error.message); 
         alert('Error al iniciar sesión: ' + error.message); 
       } else {
         localStorage.setItem('accessToken', data.session.access_token);
@@ -27,8 +26,6 @@ export default function Login() {
         window.location.href = '/';
       }
     } catch (error) {
-      setErrorMessage('Error en la solicitud: ' + error.message); 
-      alert('Error en la solicitud: ' + error.message); 
     }
   };
 
@@ -45,7 +42,6 @@ export default function Login() {
           </div>
         )}
 
-        {/* Card with border for login section */}
         <div className="card mx-auto" style={{ maxWidth: '500px', backgroundColor: '#1C1C1C', border: '2px solid #444' }}>
           <div className="card-body">
             <form onSubmit={handleSubmit}>

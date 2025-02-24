@@ -1,12 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation"; 
+import React, { useEffect, useState, useRef } from "react";
+import { useParams } from "next/navigation";
 
 const VideojuegoPage = () => {
-  const { id } = useParams(); 
+  const { id } = useParams();
   const [videojuego, setVideojuego] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const descriptionRef = useRef(null);
 
   useEffect(() => {
     const fetchVideojuego = async () => {
@@ -33,44 +36,121 @@ const VideojuegoPage = () => {
 
   if (loading) return <p>Cargando videojuego...</p>;
 
-  return (
-    <div>
-      {error && <p>{error}</p>}
+  const toggleDescription = () => {
+    setIsExpanded(!isExpanded);
+  };
 
-      {videojuego ? (
-        <>
-          <h1>{videojuego.titulo}</h1>
-          <img src={videojuego.imagen} alt={videojuego.titulo} width="300" />
-          <h3>Géneros:</h3>
-          <ul>
-            {videojuego.generos && videojuego.generos.length > 0 ? (
-              videojuego.generos.map((genero, index) => (
-                <li key={index}>{genero}</li>
-              ))
-            ) : (
-              <p>No hay géneros disponibles</p>
+  const getPlatformLogo = (platformName) => {
+    switch (platformName.toLowerCase()) {
+      case 'pc':
+        return "/pc.png"; 
+      case 'playstation':
+        return "/playstation.png";
+      case 'xbox':
+        return "/xbox.png";
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        minHeight: "100vh",
+        backgroundColor: "#0D0D0D",
+        color: "#fff",
+        padding: "20px",
+      }}
+    >
+      <div style={{ flex: 1, maxWidth: "60%", paddingRight: "20px" }}>
+        {error && <p>{error}</p>}
+
+        {videojuego ? (
+          <>
+            <h1>{videojuego.titulo}</h1>
+            <h3>Descripción:</h3>
+            <p
+              ref={descriptionRef}
+              style={{
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: isExpanded ? "none" : 4,
+              }}
+            >
+              {videojuego.descripcion}
+            </p>
+            {!isExpanded && (
+              <button
+                onClick={toggleDescription}
+                style={{ color: "#ddd", background: "none", border: "none", cursor: "pointer" }}
+              >
+                Ver más
+              </button>
             )}
-          </ul>
-          <h3>Desarrollador:</h3>
-          <p>{videojuego.desarrollador}</p>
-          <h3>Plataformas:</h3>
-          <ul>
-            {videojuego.plataformas && videojuego.plataformas.length > 0 ? (
-              videojuego.plataformas.map((plataforma, index) => (
-                <li key={index}>
-                  <a href={plataforma.link} target="_blank" rel="noopener noreferrer">
-                    {plataforma.nombre}
-                  </a>
-                </li>
-              ))
-            ) : (
-              <p>No hay plataformas disponibles</p>
+            {isExpanded && (
+              <button
+                onClick={toggleDescription}
+                style={{ color: "#ddd", background: "none", border: "none", cursor: "pointer" }}
+              >
+                Ver menos
+              </button>
             )}
-          </ul>
-        </>
-      ) : (
-        <p>Videojuego no encontrado.</p>
-      )}
+            <h3>Año:</h3>
+            <p>{videojuego.año}</p>
+            <h3>Desarrollador:</h3>
+            <p>{videojuego.desarrollador}</p>
+            <h3>Plataformas:</h3>
+            <ul>
+              {videojuego.plataformas && videojuego.plataformas.length > 0 ? (
+                videojuego.plataformas.map((plataforma, index) => (
+                  <li key={index}>
+                    {getPlatformLogo(plataforma.nombre) && (
+                      <img
+                        src={getPlatformLogo(plataforma.nombre)}
+                        alt={plataforma.nombre}
+                        style={{ width: "30px", marginRight: "10px" }}
+                      />
+                    )}
+                    <a href={plataforma.link} target="_blank" rel="noopener noreferrer">
+                      {plataforma.nombre}
+                    </a>
+                  </li>
+                ))
+              ) : (
+                <p>No hay plataformas disponibles</p>
+              )}
+            </ul>
+          </>
+        ) : (
+          <p>Videojuego no encontrado.</p>
+        )}
+      </div>
+
+      <div
+        style={{
+          width: "400px",
+          height: "auto",
+          overflow: "hidden",
+          borderRadius: "8px",
+        }}
+      >
+        {videojuego && (
+          <img
+            src={videojuego.imagen}
+            alt={videojuego.titulo}
+            style={{
+              width: "100%",
+              height: "auto",
+              objectFit: "cover",
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 };

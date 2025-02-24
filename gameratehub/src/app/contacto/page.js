@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import emailjs from "@emailjs/browser";
 
-
 export default function Contacto() {
   const [nombre, setNombre] = useState("");
   const [email, setEmail] = useState("");
@@ -28,7 +27,7 @@ export default function Contacto() {
       )
       .then((response) => {
         alert("Correo enviado con éxito.");
-        console.log('Correo enviado con éxito:', response); 
+        console.log('Correo enviado con éxito:', response);
         setNombre("");
         setEmail("");
         setAsunto("");
@@ -41,46 +40,91 @@ export default function Contacto() {
   };
 
   return (
-    <div>
-      <h2>Contáctanos</h2>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="nombre">Nombre:</label>
-        <input
-          type="text"
-          id="nombre"
-          value={nombre}
-          onChange={(e) => setNombre(e.target.value)}
-          required
-        />
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{
+        backgroundColor: "#0D0D0D",
+        color: "#FFFFFF",
+        minHeight: "90vh",
+        padding: "0 20px",
+      }}
+    >
+      <div
+        className="card"
+        style={{
+          maxWidth: "600px",
+          width: "100%",
+          backgroundColor: "#1C1C1C",
+          border: "2px solid #444",
+        }}
+      >
+        <div className="card-body">
+          <h1 className="text-center text-white mb-4">Contáctanos</h1>
 
-        <label htmlFor="email">Correo Electrónico:</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+          <form onSubmit={handleSubmit}>
+            <div className="mb-3">
+              <label htmlFor="nombre" className="form-label text-white">
+                Nombre:
+              </label>
+              <input
+                type="text"
+                id="nombre"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                className="form-control"
+                required
+              />
+            </div>
 
-        <label htmlFor="asunto">Asunto o Motivo:</label>
-        <input
-          type="text"
-          id="asunto"
-          value={asunto}
-          onChange={(e) => setAsunto(e.target.value)}
-          required
-        />
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label text-white">
+                Correo Electrónico:
+              </label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="form-control"
+                required
+              />
+            </div>
 
-        <label htmlFor="mensaje">Mensaje:</label>
-        <textarea
-          id="mensaje"
-          value={mensaje}
-          onChange={(e) => setMensaje(e.target.value)}
-          required
-        ></textarea>
+            <div className="mb-3">
+              <label htmlFor="asunto" className="form-label text-white">
+                Asunto:
+              </label>
+              <input
+                type="text"
+                id="asunto"
+                value={asunto}
+                onChange={(e) => setAsunto(e.target.value)}
+                className="form-control"
+                required
+              />
+            </div>
 
-        <button type="submit">Enviar</button>
-      </form>
+            <div className="mb-3">
+              <label htmlFor="mensaje" className="form-label text-white">
+                Mensaje:
+              </label>
+              <textarea
+                id="mensaje"
+                value={mensaje}
+                onChange={(e) => setMensaje(e.target.value)}
+                className="form-control"
+                required
+              ></textarea>
+            </div>
+
+            <div className="d-flex justify-content-center">
+              <button type="submit" className="btn btn-primary w-100">
+                Enviar
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }

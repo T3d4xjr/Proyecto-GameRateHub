@@ -42,7 +42,7 @@ a {
   }
 }
 .bg-dark-custom {
-  background-color: #0D0D0D !important;
+  background-color: #1C1C1C !important;
 }
 
 .navbar-toggler-icon {
@@ -82,3 +82,83 @@ a {
 .navbar-nav .nav-item:first-child .fa-home {
   margin-bottom: 0; /* Elimina cualquier espacio extra debajo del icono */
 }
+/* Fondo negro y letras blancas para toda la pantalla */
+.perfil-container {
+  min-height: 100vh;
+  background-color: #0D0D0D;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Imagen de perfil */
+.perfil-imagen {
+  border-radius: 50%;
+  margin: 20px;
+  width: 150px;
+}
+
+/* Estilos para formularios */
+.perfil-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 300px;
+}
+
+.perfil-input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #fff;
+  background-color: #222;
+  color: #fff;
+}
+
+.perfil-boton {
+  background-color: #ff6600;
+  color: #fff;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.perfil-boton:hover {
+  background-color: #ff4500;
+}
+.juegos-container {
+  display: flex; /* Flexbox para mostrar los juegos en fila */
+  justify-content: space-around; /* Espaciado equitativo entre los elementos */
+  gap: 20px; /* Separación entre cada tarjeta de juego */
+  flex-wrap: wrap; /* Permite que los elementos se ajusten a la siguiente línea cuando el espacio es insuficiente */
+  padding: 20px;
+}
+
+.juego-card {
+  width: 200px; /* Tamaño fijo para cada tarjeta de juego */
+  text-align: center;
+}
+
+.juego-card img {
+  width: 100%; /* Hace que la imagen ocupe todo el ancho disponible */
+  border-radius: 8px; /* Bordes redondeados en las imágenes */
+}
+
+/* Diseño responsivo */
+@media (max-width: 768px) {
+  .juegos-container {
+    flex-direction: column; /* Cambia la dirección a columna cuando la pantalla es pequeña */
+    align-items: center; /* Centra los elementos */
+  }
+
+  .juego-card {
+    width: 80%; /* Ajusta el tamaño de las tarjetas en pantallas pequeñas */
+    margin-bottom: 15px; /* Espaciado entre las tarjetas */
+  }
+}
+

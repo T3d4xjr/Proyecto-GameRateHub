@@ -1,5 +1,7 @@
 "use client";
 import React, { useState } from "react";
+import "bootstrap/dist/css/bootstrap.min.css";
+import { FaPlus, FaMinus } from "react-icons/fa"; 
 
 export default function TerminosCondiciones() {
   const terminosPreguntasFrecuentes = [
@@ -60,23 +62,60 @@ export default function TerminosCondiciones() {
   function toggleAnswer(index) {
     setIsOpen((prev) => ({
       ...prev,
-      [index]: !prev[index], 
+      [index]: !prev[index],
     }));
   }
 
   return (
-    <div>
-      <h2>Términos y Condiciones de GameRate HUB</h2>
-      <div className="faq-container">
+    <div
+      className="container-fluid d-flex flex-column justify-content-center align-items-center"
+      style={{
+        backgroundColor: "#0D0D0D",
+        color: "#FFFFFF",
+        minHeight: "100vh",
+      }}
+    >
+      <h2 className="text-center mb-5" style={{ color: "#FFFFFF" }}>
+        Términos y Condiciones de GameRate HUB
+      </h2>
+
+      <div className="accordion w-75" id="faqAccordion">
         {terminosPreguntasFrecuentes.map((item, index) => (
-          <div key={index}>
-            <div className="question" onClick={() => toggleAnswer(index)}>
-              <button>{isOpen[index] ? "-" : "+"}</button>
-              <span>{item.pregunta}</span>
-            </div>
+          <div
+            key={index}
+            className="accordion-item"
+            style={{
+              backgroundColor: "#1C1C1C",
+              border: "none",
+              marginBottom: "10px", 
+            }}
+          >
+            <h2 className="accordion-header">
+              <button
+                className="accordion-button collapsed d-flex justify-content-between align-items-center"
+                type="button"
+                onClick={() => toggleAnswer(index)}
+                style={{
+                  backgroundColor: "#222",
+                  color: "#FFFFFF",
+                  fontWeight: "bold",
+                  padding: "20px", 
+                  fontSize: "1.2rem", 
+                }}
+              >
+                {item.pregunta}
+                <span className="ms-2">
+                  {isOpen[index] ? (
+                    <FaMinus className="icon-minus" size={20} />
+                  ) : (
+                    <FaPlus className="icon-plus" size={20} />
+                  )}
+                </span>
+              </button>
+            </h2>
             {isOpen[index] && (
-              <div className="answer">
-                <p>{item.respuesta}</p>
+              <div className="accordion-body" style={{ backgroundColor: "#1C1C1C", color: "#FFFFFF", padding: "20px" }}>
+                {item.respuesta}
               </div>
             )}
           </div>
@@ -85,4 +124,3 @@ export default function TerminosCondiciones() {
     </div>
   );
 }
-
