@@ -18,9 +18,8 @@ export default function Registro() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrorMessage(''); 
+    setErrorMessage('');
     
-  
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!emailPattern.test(email)) {
       setErrorMessage('Por favor, ingresa un correo electrónico válido');
@@ -47,7 +46,7 @@ export default function Registro() {
 
       if (response.ok) {
         localStorage.setItem('userName', nombre);
-        alert('Registro exitoso.Vaya a su correo para confirmar.');
+        alert('Registro exitoso. Vaya a su correo para confirmar.');
         window.location.href = '/iniciarSesion';  
       } else {
         setErrorMessage(data.error || 'Hubo un error al registrar el usuario');
@@ -73,68 +72,92 @@ export default function Registro() {
   };
 
   return (
-    <div>
-      <h1><b>GameRate Hub</b></h1>
-      <p>La brújula para gamers en busca de su próxima aventura.</p>
-      <h2>Formulario de Registro</h2>
+    <div className="container-fluid d-flex flex-column justify-content-center align-items-center" style={{ backgroundColor: '#0D0D0D', color: '#FFFFFF', minHeight: '100vh' }}>
+      <div className="text-center">
+        <h1 style={{ color: '#FFFFFF' }}><b>GameRate Hub</b></h1>
+        <p style={{ color: '#FFFFFF' }}>La brújula para gamers en busca de su próxima aventura.</p>
+        <h2 style={{ color: '#FFFFFF' }}>Formulario de Registro</h2>
 
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="nombre">Nombre:</label>
-        <input
-          type="text"
-          id="nombre"
-          value={nombre}
-          onChange={handleNombreChange}
-          required
-        />
+        {errorMessage && (
+          <div className="alert alert-danger text-center" role="alert" style={{ color: '#FFFFFF' }}>
+            {errorMessage}
+          </div>
+        )}
 
-        <label htmlFor="email">Email:</label>
-        <input
-          type="email"
-          id="email"
-          value={email}
-          onChange={handleEmailChange}
-          required
-        />
+        <div className="card mx-auto" style={{ maxWidth: '500px', backgroundColor: '#1C1C1C', border: '2px solid #444' }}>
+          <div className="card-body">
+            <form onSubmit={handleSubmit}>
+              <div className="mb-3">
+                <label htmlFor="nombre" className="form-label" style={{ color: '#FFFFFF' }}>Nombre:</label>
+                <input
+                  type="text"
+                  id="nombre"
+                  value={nombre}
+                  onChange={handleNombreChange}
+                  className="form-control"
+                  required
+                />
+              </div>
 
-        <label htmlFor="contrasena">Contraseña:</label>
-        <input
-          type="password"
-          id="contrasena"
-          value={contrasena}
-          onChange={handleContrasenaChange}
-          required
-        />
+              <div className="mb-3">
+                <label htmlFor="email" className="form-label" style={{ color: '#FFFFFF' }}>Email:</label>
+                <input
+                  type="email"
+                  id="email"
+                  value={email}
+                  onChange={handleEmailChange}
+                  className="form-control"
+                  required
+                />
+              </div>
 
-        <label>
-          <input
-            type="checkbox"
-            id="terminos"
-            checked={terminos}
-            onChange={handleTerminosChange}
-            required
-          />
-          Acepto los <a href="/terminos">Términos y Condiciones</a>
-        </label>
+              <div className="mb-3">
+                <label htmlFor="contrasena" className="form-label" style={{ color: '#FFFFFF' }}>Contraseña:</label>
+                <input
+                  type="password"
+                  id="contrasena"
+                  value={contrasena}
+                  onChange={handleContrasenaChange}
+                  className="form-control"
+                  required
+                />
+              </div>
 
-        <label>
-          <input
-            type="checkbox"
-            id="politica"
-            checked={politica}
-            onChange={handlePoliticaChange}
-            required
-          />
-          Acepto la <a href="/politica">Política de Privacidad</a>
-        </label>
+              <div className="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  id="terminos"
+                  checked={terminos}
+                  onChange={handleTerminosChange}
+                  className="form-check-input"
+                  required
+                />
+                <label htmlFor="terminos" className="form-check-label" style={{ color: '#FFFFFF' }}>
+                  Acepto los <a href="/terminos" style={{ color: '#FFFFFF' }}>Términos y Condiciones</a>
+                </label>
+              </div>
 
-        <button type="submit">Registrar</button>
-      </form>
+              <div className="mb-3 form-check">
+                <input
+                  type="checkbox"
+                  id="politica"
+                  checked={politica}
+                  onChange={handlePoliticaChange}
+                  className="form-check-input"
+                  required
+                />
+                <label htmlFor="politica" className="form-check-label" style={{ color: '#FFFFFF' }}>
+                  Acepto la <a href="/politica" style={{ color: '#FFFFFF' }}>Política de Privacidad</a>
+                </label>
+              </div>
 
-      <p>¿Ya tienes cuenta? <a href="/iniciarSesion">Inicia sesión</a></p>
+              <button type="submit" className="btn btn-primary w-100">Registrar</button>
+            </form>
 
-      <div>
-        <button onClick={handleGoogleLogin}>Registrarse/Iniciar sesión con Google</button>
+            <p className="text-center mt-3" style={{ color: '#FFFFFF' }}>¿Ya tienes cuenta? <a href="/iniciarSesion" style={{ color: '#FFFFFF' }}>Inicia sesión</a></p>
+          </div>
+        </div>
+
       </div>
     </div>
   );
