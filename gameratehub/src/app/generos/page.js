@@ -9,7 +9,7 @@ const GenerosPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const sliderRef = useRef(null);
+  const slidersRef = useRef({}); 
 
   useEffect(() => {
     const fetchGeneros = async () => {
@@ -22,7 +22,7 @@ const GenerosPage = () => {
         } else {
           setError(data.message || "Algo salió mal");
         }
-      } catch (error) {
+      } catch (error) { 
         setError("Hubo un error al obtener los géneros.");
       } finally {
         setLoading(false);
@@ -32,8 +32,8 @@ const GenerosPage = () => {
     fetchGeneros();
   }, []);
 
-  const scrollSlider = (direction) => {
-    const slider = sliderRef.current;
+  const scrollSlider = (generoId, direction) => {
+    const slider = slidersRef.current[generoId];
     if (slider) {
       const scrollAmount = direction === "left" ? -200 : 200;
       slider.scrollBy({ left: scrollAmount, behavior: "smooth" });
@@ -55,40 +55,32 @@ const GenerosPage = () => {
   }
 
   return (
-    <div style={{ backgroundColor: "#0D0D0D", color: "#FFFFFF" }}>
-      <h1 className="text-center py-4" style={{ marginBottom: "0" }}>Géneros</h1>
-      {error && <p>{error}</p>}
+    <div style={{ backgroundColor: "#0D0D0D", color: "#FFFFFF", padding: "20px" }}>
+      <h1 className="text-center py-4">Géneros</h1>
+      {error && <p className="text-center text-danger">{error}</p>}
       {generos.length > 0 ? (
         generos.map((genero) => (
-          <div key={genero.id} className="mb-4" style={{ margin: 0 }}>
+          <div key={genero.id} className="mb-5">
             <h2 className="text-center">{genero.nombre}</h2>
-            <div className="d-flex justify-content-between align-items-center">
-              <button
-                onClick={() => scrollSlider("left")}
-                className="btn btn-light"
-                style={{
-                  backgroundColor: "#222",
-                  color: "#fff",
-                  borderRadius: "50%",
-                  border: "none",
-                }}
-              >
-                &lt;
-              </button>
+            <div className="d-flex justify-content-center align-items-center" style={{ gap: "10px" }}>
               <div
-                ref={sliderRef}
+                ref={(el) => (slidersRef.current[genero.id] = el)}
                 style={{
                   display: "flex",
                   overflowX: "auto",
-                  gap: "10px",
-                  paddingBottom: "20px",
-                  width: "80%",
+                  gap: "15px",
+                  paddingBottom: "10px",
+                  scrollBehavior: "smooth",
+                  maxWidth: "80%",
+                  whiteSpace: "nowrap",
+                  padding: "10px 0",
+                  alignItems: "center",
                 }}
               >
                 {genero.videojuegos &&
                   genero.videojuegos.length > 0 &&
                   genero.videojuegos.map((videojuego) => (
-                    <div key={videojuego.id} style={{ minWidth: "150px" }}>
+                    <div key={videojuego.id} style={{ minWidth: "150px", textAlign: "center" }}>
                       <Link href={`/videojuegos/${videojuego.id}`}>
                         <img
                           src={videojuego.imagen}
@@ -103,29 +95,16 @@ const GenerosPage = () => {
                           }}
                         />
                       </Link>
-                      <p className="text-center">{videojuego.titulo}</p>
+                      <p style={{ marginTop: "5px", fontSize: "14px" }}>{videojuego.titulo}</p>
                     </div>
                   ))}
               </div>
-              <button
-                onClick={() => scrollSlider("right")}
-                className="btn btn-light"
-                style={{
-                  backgroundColor: "#222",
-                  color: "#fff",
-                  borderRadius: "50%",
-                  padding: "10px",
-                  border: "none",
-                  margin: 0,
-                }}
-              >
-                &gt;
-              </button>
+
             </div>
           </div>
         ))
       ) : (
-        <p>No hay géneros disponibles.</p>
+        <p className="text-center">No hay géneros disponibles.</p>
       )}
     </div>
   );
