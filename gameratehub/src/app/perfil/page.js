@@ -1,8 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { supabase } from "../supabase/supabase";
 import { FaCog } from "react-icons/fa"; // Ícono de configuración
 import "../globals.css";
+import { Spinner } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Link from "next/link";
 
 export default function PerfilPage() {
   const [userProfile, setUserProfile] = useState(null);
@@ -18,6 +22,7 @@ export default function PerfilPage() {
   const [fotoPerfilUrl, setFotoPerfilUrl] = useState("/defecto.png");
   const [isEditing, setIsEditing] = useState(false);
   const [mejoresJuegos, setMejoresJuegos] = useState([]);
+  const router = useRouter();
 
   const juegos = [
     { id: 1, titulo: "Final Fantasy VII", imagen: "/rpg1.jpg" },
@@ -30,8 +35,8 @@ export default function PerfilPage() {
       const accessToken = localStorage.getItem("accessToken");
 
       if (!accessToken) {
-        setError("No se ha encontrado la información del usuario.");
-        setLoading(false);
+        alert("Debes iniciar sesión para acceder al perfil.");
+        router.push("/");
         return;
       }
 
@@ -44,8 +49,8 @@ export default function PerfilPage() {
         });
 
         if (!response.ok) {
-          setError("No se pudo cargar el perfil.");
-          setLoading(false);
+          alert("No se pudo cargar el perfil. Redirigiendo al inicio.");
+          router.push("/");
           return;
         }
 
@@ -54,14 +59,14 @@ export default function PerfilPage() {
         setFotoPerfilUrl(user?.foto_perfil || "/defecto.png");
         setLoading(false);
       } catch (err) {
-        setError("Error al cargar el perfil.");
-        setLoading(false);
+        alert("Error al cargar el perfil. Redirigiendo al inicio.");
+        router.push("/");
       }
     };
 
     fetchUserProfile();
     setMejoresJuegos(juegos);
-  }, []);
+  }, [router]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -174,7 +179,13 @@ export default function PerfilPage() {
   };
 
   if (loading) {
-    return <div className="loading">Cargando...</div>;
+    return (
+      <div className="d-flex justify-content-center align-items-center vh-100">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Cargando...</span>
+        </Spinner>
+      </div>
+    );
   }
 
   if (error) {
@@ -182,97 +193,76 @@ export default function PerfilPage() {
   }
 
   return (
-    <div className="perfil-container">
-      <h1>
-        Perfil de Usuario
-        <FaCog className="config-icon" onClick={handleEditClick} />
-      </h1>
+    <div className="container-fluid d-flex flex-column min-vh-100" style={{ backgroundColor: "#0D0D0D", color: "#FFFFFF", padding: "20px" }}>
+  <div className="container" style={{ maxWidth: "1200px", margin: "auto" }}>
+    <h1 className="text-center mb-4">
+      Perfil de Usuario
+      <FaCog className="config-icon ms-2" onClick={handleEditClick} />
+    </h1>
 
-      <img src={fotoPerfilUrl} alt="Foto de perfil" className="perfil-imagen" />
+    <div className="row align-items-center">
+      <div className="col-md-6">
+        {isEditing ? (
+          <form className="perfil-form" onSubmit={handleSubmit}>
+            <label>País:</label>
+            <input type="text" name="pais" value={newProfileData.pais} onChange={handleInputChange} className="form-control bg-dark text-light" />
 
-      {isEditing ? (
-        <form className="perfil-form" onSubmit={handleSubmit}>
-          <label>País:</label>
-          <input
-            type="text"
-            name="pais"
-            value={newProfileData.pais}
-            onChange={handleInputChange}
-          />
+            <label>Localidad:</label>
+            <input type="text" name="localidad" value={newProfileData.localidad} onChange={handleInputChange} className="form-control bg-dark text-light" />
 
-          <label>Localidad:</label>
-          <input
-            type="text"
-            name="localidad"
-            value={newProfileData.localidad}
-            onChange={handleInputChange}
-          />
+            <label>Teléfono:</label>
+            <input type="text" name="telefono" value={newProfileData.telefono} onChange={handleInputChange} className="form-control bg-dark text-light" />
 
-          <label>Teléfono:</label>
-          <input
-            type="text"
-            name="telefono"
-            value={newProfileData.telefono}
-            onChange={handleInputChange}
-          />
+            <label>Información:</label>
+            <input type="text" name="informacion" value={newProfileData.informacion} onChange={handleInputChange} className="form-control bg-dark text-light" />
 
-          <label>Información:</label>
-          <input
-            type="text"
-            name="informacion"
-            value={newProfileData.informacion}
-            onChange={handleInputChange}
-          />
+            <label>Foto de perfil:</label>
+            <input type="file" name="foto_perfil" accept="image/*" onChange={handleFileChange} className="form-control bg-dark text-light" />
 
-          <label>Foto de perfil:</label>
-          <input
-            type="file"
-            name="foto_perfil"
-            accept="image/*"
-            onChange={handleFileChange}
-          />
+            <button type="submit" className="btn btn-primary mt-3 w-100">Actualizar perfil</button>
+          </form>
+        ) : (
+          <div className="perfil-info">
+            <p><strong>Nombre:</strong> {userProfile?.nombre}</p>
+            <p><strong>Email:</strong> {userProfile?.email}</p>
+            <p><strong>País:</strong> {userProfile?.pais}</p>
+            <p><strong>Localidad:</strong> {userProfile?.localidad}</p>
+            <p><strong>Teléfono:</strong> {userProfile?.telefono}</p>
+            <p><strong>Información:</strong> {userProfile?.informacion}</p>
+          </div>
+        )}
+      </div>
 
-          <button type="submit">Actualizar perfil</button>
-        </form>
-      ) : (
-        <div className="perfil-info">
-          <p>
-            <strong>Nombre:</strong> {userProfile?.nombre}
-          </p>
-          <p>
-            <strong>Email:</strong> {userProfile?.email}
-          </p>
-          <p>
-            <strong>País:</strong> {userProfile?.pais}
-          </p>
-          <p>
-            <strong>Localidad:</strong> {userProfile?.localidad}
-          </p>
-          <p>
-            <strong>Teléfono:</strong> {userProfile?.telefono}
-          </p>
-          <p>
-            <strong>Información:</strong> {userProfile?.informacion}
-          </p>
-        </div>
-      )}
-
-      <section>
-        <h2>Mejores juegos</h2>
-        <div className="juegos-container">
-          {mejoresJuegos.map((juego) => (
-            <div key={juego.id} className="juego-card">
-              <img
-                src={juego.imagen}
-                alt={juego.titulo}
-                title={juego.titulo}
-                width={150}
-              />
-              <h3>{juego.titulo}</h3>
-            </div>
-          ))}
-        </div>
-      </section>
+      <div className="col-md-6 text-center">
+        <img src={fotoPerfilUrl} alt="Foto de perfil" className="perfil-imagen rounded-circle img-fluid shadow-lg" 
+          style={{ maxWidth: "250px", border: "3px solid #FFFFFF", marginBottom: "30px" }} />
+      </div>
     </div>
+    
+    <section className="container mt-5 mb-5">
+      <h2 className="text-center mb-4">Mejores juegos</h2>
+      <div className="row">
+        {mejoresJuegos.map((juego) => (
+          <div key={juego.id} className="col-md-4 mb-4">
+            <Link href={`/videojuegos/${juego.id}`} className="text-decoration-none">
+              <div className="card shadow-sm border-0 h-100" style={{ backgroundColor: "#1A1A1A", color: "#FFFFFF" }}>
+                <img  
+                  src={juego.imagen}
+                  alt={juego.titulo}
+                  className="card-img-top rounded"
+                  style={{ height: "200px", objectFit: "cover", padding: "10p" }}
+                />
+                <div className="card-body text-center">
+                  <h5 className="card-title">{juego.titulo}</h5>
+                </div>
+              </div>
+            </Link>
+          </div>
+        ))}
+      </div>
+    </section>
+  </div>
+</div>
+
   );
 }

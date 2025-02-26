@@ -32,13 +32,6 @@ const GenerosPage = () => {
     fetchGeneros();
   }, []);
 
-  const scrollSlider = (generoId, direction) => {
-    const slider = slidersRef.current[generoId];
-    if (slider) {
-      const scrollAmount = direction === "left" ? -200 : 200;
-      slider.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    }
-  };
 
   if (loading) {
     return (

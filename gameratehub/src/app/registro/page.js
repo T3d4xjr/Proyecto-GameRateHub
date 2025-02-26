@@ -1,6 +1,7 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { supabase } from '../supabase/supabase'; 
+
 
 export default function Registro() {
   const [nombre, setNombre] = useState('');
@@ -9,6 +10,7 @@ export default function Registro() {
   const [terminos, setTerminos] = useState(false);
   const [politica, setPolitica] = useState(false);
   const [errorMessage, setErrorMessage] = useState(''); 
+  const [randomStart, setRandomStart] = useState(0);
 
   const handleNombreChange = (e) => setNombre(e.target.value);
   const handleContrasenaChange = (e) => setContrasena(e.target.value);
@@ -57,107 +59,70 @@ export default function Registro() {
       alert('Hubo un error al registrar el usuario'); 
     }
   };
-
-  const handleGoogleLogin = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    });
-
-    if (error) {
-      console.error('Error con el login de Google', error);
-      alert('Error con el login de Google'); 
-    } else {
-      window.location.href = '/iniciarSesion'; 
-    }
-  };
+  useEffect(() => {
+      const randomTime = Math.floor(Math.random() * 400); 
+      setRandomStart(randomTime);
+    }, []);
 
   return (
-    <div className="container-fluid d-flex flex-column justify-content-center align-items-center" style={{ backgroundColor: '#0D0D0D', color: '#FFFFFF', minHeight: '100vh' }}>
-      <div className="text-center">
-        <h1 style={{ color: '#FFFFFF' }}><b>GameRate Hub</b></h1>
-        <p style={{ color: '#FFFFFF' }}>La brújula para gamers en busca de su próxima aventura.</p>
-        <h2 style={{ color: '#FFFFFF' }}>Formulario de Registro</h2>
+    <div className="registro-container">
+      <div className="video-background">
+      <iframe
+          src={`https://www.youtube.com/embed/-kkT-z0igtU?autoplay=1&mute=1&loop=1&controls=0&playlist=-kkT-z0igtU&start=${randomStart}`}
+          frameBorder="0"
+          allow="autoplay; fullscreen"
+          allowFullScreen
+        ></iframe>
+      </div>
+
+      {/* Contenido del formulario */}
+      <div className="login-content">
+        <h1><b>GameRate Hub</b></h1>
+        <p>La brújula para gamers en busca de su próxima aventura.</p>
+        <h2>Formulario de Registro</h2>
 
         {errorMessage && (
-          <div className="alert alert-danger text-center" role="alert" style={{ color: '#FFFFFF' }}>
-            {errorMessage}
-          </div>
+          <div className="alert alert-danger text-center">{errorMessage}</div>
         )}
 
-        <div className="card mx-auto" style={{ maxWidth: '500px', backgroundColor: '#1C1C1C', border: '2px solid #444' }}>
+        <div className="card">
           <div className="card-body">
             <form onSubmit={handleSubmit}>
               <div className="mb-3">
-                <label htmlFor="nombre" className="form-label" style={{ color: '#FFFFFF' }}>Nombre:</label>
-                <input
-                  type="text"
-                  id="nombre"
-                  value={nombre}
-                  onChange={handleNombreChange}
-                  className="form-control"
-                  required
-                />
+                <label htmlFor="nombre" className="form-label">Nombre:</label>
+                <input type="text" id="nombre" value={nombre} onChange={handleNombreChange} className="form-control" required />
               </div>
 
               <div className="mb-3">
-                <label htmlFor="email" className="form-label" style={{ color: '#FFFFFF' }}>Email:</label>
-                <input
-                  type="email"
-                  id="email"
-                  value={email}
-                  onChange={handleEmailChange}
-                  className="form-control"
-                  required
-                />
+                <label htmlFor="email" className="form-label">Email:</label>
+                <input type="email" id="email" value={email} onChange={handleEmailChange} className="form-control" required />
               </div>
 
               <div className="mb-3">
-                <label htmlFor="contrasena" className="form-label" style={{ color: '#FFFFFF' }}>Contraseña:</label>
-                <input
-                  type="password"
-                  id="contrasena"
-                  value={contrasena}
-                  onChange={handleContrasenaChange}
-                  className="form-control"
-                  required
-                />
+                <label htmlFor="contrasena" className="form-label">Contraseña:</label>
+                <input type="password" id="contrasena" value={contrasena} onChange={handleContrasenaChange} className="form-control" required />
               </div>
 
               <div className="mb-3 form-check">
-                <input
-                  type="checkbox"
-                  id="terminos"
-                  checked={terminos}
-                  onChange={handleTerminosChange}
-                  className="form-check-input"
-                  required
-                />
-                <label htmlFor="terminos" className="form-check-label" style={{ color: '#FFFFFF' }}>
-                  Acepto los <a href="/terminos" style={{ color: '#FFFFFF' }}>Términos y Condiciones</a>
+                <input type="checkbox" id="terminos" checked={terminos} onChange={handleTerminosChange} className="form-check-input" required />
+                <label htmlFor="terminos" className="form-check-label">
+                  Acepto los <a href="/terminos">Términos y Condiciones</a>
                 </label>
               </div>
 
               <div className="mb-3 form-check">
-                <input
-                  type="checkbox"
-                  id="politica"
-                  checked={politica}
-                  onChange={handlePoliticaChange}
-                  className="form-check-input"
-                  required
-                />
-                <label htmlFor="politica" className="form-check-label" style={{ color: '#FFFFFF' }}>
-                  Acepto la <a href="/politica" style={{ color: '#FFFFFF' }}>Política de Privacidad</a>
+                <input type="checkbox" id="politica" checked={politica} onChange={handlePoliticaChange} className="form-check-input" required />
+                <label htmlFor="politica" className="form-check-label">
+                  Acepto la <a href="/politica">Política de Privacidad</a>
                 </label>
               </div>
 
               <button type="submit" className="btn btn-primary w-100">Registrar</button>
             </form>
 
-            <p className="text-center mt-3" style={{ color: '#FFFFFF' }}>¿Ya tienes cuenta? <a href="/iniciarSesion" style={{ color: '#FFFFFF' }}>Inicia sesión</a></p>
+            <p className="text-center mt-3">¿Ya tienes cuenta? <a href="/iniciarSesion">Inicia sesión</a></p>
           </div>
         </div>
-
       </div>
     </div>
   );

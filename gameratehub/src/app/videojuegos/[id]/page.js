@@ -1,6 +1,8 @@
 "use client";
 import React, { useEffect, useState, useRef } from "react";
 import { useParams } from "next/navigation";
+import { Spinner } from "react-bootstrap";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const VideojuegoPage = () => {
   const { id } = useParams();
@@ -34,7 +36,16 @@ const VideojuegoPage = () => {
     }
   }, [id]);
 
-  if (loading) return <p>Cargando videojuego...</p>;
+  if (loading) {
+    return (
+      <div
+        className="d-flex justify-content-center align-items-center"
+        style={{ minHeight: "100vh", backgroundColor: "#0D0D0D" }}
+      >
+        <Spinner animation="border" variant="light" />
+      </div>
+    );
+  }
 
   const toggleDescription = () => {
     setIsExpanded(!isExpanded);
@@ -43,7 +54,7 @@ const VideojuegoPage = () => {
   const getPlatformLogo = (platformName) => {
     switch (platformName.toLowerCase()) {
       case 'pc':
-        return "/pc.png"; 
+        return "/pc.png";
       case 'playstation':
         return "/playstation.png";
       case 'xbox':
@@ -84,15 +95,14 @@ const VideojuegoPage = () => {
             >
               {videojuego.descripcion}
             </p>
-            {!isExpanded && (
+            {!isExpanded ? (
               <button
                 onClick={toggleDescription}
                 style={{ color: "#ddd", background: "none", border: "none", cursor: "pointer" }}
               >
                 Ver más
               </button>
-            )}
-            {isExpanded && (
+            ) : (
               <button
                 onClick={toggleDescription}
                 style={{ color: "#ddd", background: "none", border: "none", cursor: "pointer" }}
