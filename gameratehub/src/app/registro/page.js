@@ -68,7 +68,7 @@ export default function Registro() {
     <div className="registro-container">
       <div className="video-background">
       <iframe
-          src={`https://www.youtube.com/embed/-kkT-z0igtU?autoplay=1&mute=1&loop=1&controls=0&playlist=-kkT-z0igtU&start=${randomStart}`}
+          src={`https://www.youtube-nocookie.com/embed/-kkT-z0igtU?autoplay=1&mute=1&loop=1&controls=0&playlist=-kkT-z0igtU&start=${randomStart}`}
           frameBorder="0"
           allow="autoplay; fullscreen"
           allowFullScreen
