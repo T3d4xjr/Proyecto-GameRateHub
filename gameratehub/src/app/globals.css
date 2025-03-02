@@ -186,10 +186,10 @@ a {
 
 .video-background iframe {
   position: absolute;
-  top: 49%;
+  top: 50%;
   left: 50%;
-  width: 100vw;
-  height: 56.25vw; /* Relación de aspecto 16:9 */
+  width: 110vw;
+  height: 60vw; /* Relación de aspecto 16:9 */
   min-height: 100vh;
   min-width: 177.77vh; /* Relación de aspecto 16:9 */
   transform: translate(-50%, -50%);
@@ -239,7 +239,7 @@ a {
 
 .video-background iframe {
   position: absolute;
-  top: 49%;
+  top: 47.5%;
   left: 50%;
   width: 100vw;
   height: 56.25vw; /* Relación de aspecto 16:9 */
